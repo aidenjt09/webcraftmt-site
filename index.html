@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebCraftMT — Beautiful Websites for California Businesses</title>
+  <meta name="description" content="We revamp outdated websites for small California businesses. Modern design, fast delivery, ongoing care.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Page-specific tweaks ── */
+
+    /* Marquee strip */
+    .marquee-outer{overflow:hidden;padding:1.25rem 0;background:#f4f2fb}
+    .marquee-track{display:flex;gap:0;width:max-content;animation:marqueeScroll 28s linear infinite}
+    @keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .marquee-item{display:flex;align-items:center;gap:0.5rem;padding:0 2.5rem;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);white-space:nowrap}
+    .marquee-dot{width:4px;height:4px;border-radius:50%;background:#888;opacity:0.6}
+
+    /* Feature section — compact alternating layout */
+    #features{padding:4rem 0}
+    .feature-row{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;padding:2.5rem 0}
+    .feature-row.reverse .feature-visual{order:2}
+    .feature-row.reverse .feature-text{order:1}
+    .feature-text .tag{margin-bottom:0.75rem}
+    .feature-text h2{font-size:clamp(1.5rem,2.8vw,2.2rem);margin-bottom:1rem;line-height:1.2}
+    .feature-text p{font-size:0.975rem;margin-bottom:1.5rem}
+    .feature-visual{border-radius:var(--radius-xl);overflow:hidden;aspect-ratio:4/3;position:relative}
+    .feature-visual-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .mock-browser{width:88%;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 32px rgba(0,0,0,0.12);overflow:hidden}
+    .mock-bar{background:#f5f5f5;padding:0.6rem 0.875rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(0,0,0,0.08)}
+    .mock-dot{width:9px;height:9px;border-radius:50%}
+    .mock-url{flex:1;background:rgba(0,0,0,0.05);border-radius:5px;padding:0.25rem 0.6rem;font-size:0.65rem;color:var(--text-3);margin:0 0.5rem}
+    .mock-body{padding:1.25rem;display:flex;flex-direction:column;gap:0.6rem}
+    .mock-hero-block{background:linear-gradient(135deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03));border-radius:8px;height:70px;display:flex;align-items:center;padding:0 1rem}
+    .mock-line{height:8px;border-radius:4px;background:rgba(0,0,0,0.08)}
+    .mock-line.short{width:55%}
+    .mock-line.med{width:75%}
+    .mock-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.25rem}
+    .mock-card{background:#fafafa;border-radius:6px;height:40px;border:1px solid rgba(0,0,0,0.07)}
+
+    /* Stats row */
+    .stats-band{padding:5rem 0;background:var(--bg-surface)}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
+    .stat-card{padding:2rem 1rem;border-radius:var(--radius-lg);position:relative}
+    .stat-value{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(2.5rem,5vw,4rem);font-weight:600;line-height:1;display:block;margin-bottom:0.5rem}
+    .stat-label{font-size:0.825rem;color:var(--text-3);font-weight:500;letter-spacing:0.04em}
+
+    /* Scroll progress bar */
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#2c2c2c,#888);width:0%;z-index:300;transition:width 0.1s linear}
+
+    .feature-row+.feature-row{border-top:1px solid var(--border)}
+    @media(max-width:900px){
+      .feature-row{grid-template-columns:1fr;gap:2rem;padding:2rem 0}
+      .feature-row.reverse .feature-visual,.feature-row.reverse .feature-text{order:unset}
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:560px){
+      .stats-grid{grid-template-columns:1fr 1fr}
+    }
+
+    /* ── Hero visual (website builder) ── */
+    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:3rem}
+    .hero-inner .hero-content{text-align:center;max-width:740px;width:100%}
+    .hero-inner .hero-ctas{justify-content:center}
+    .hero-inner .hero-social-proof{justify-content:center}
+    .hero-inner .hero-tagline{margin:0 auto}
+    .hero-inner .hero-sub{margin:0 auto}
+    .hero-visual{display:flex;flex-direction:column;gap:1rem;width:100%}
+    /* Browser — cinematic wide aspect ratio */
+    .wb-browser{background:#fff;border:1px solid rgba(0,0,0,0.09);border-radius:16px;box-shadow:0 12px 60px rgba(0,0,0,0.11);overflow:hidden;display:flex;flex-direction:column;width:100%;aspect-ratio:16/7}
+    .wb-topbar{background:#f5f5f5;padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(0,0,0,0.07);flex-shrink:0}
+    .wb-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+    .wb-url{flex:1;background:rgba(0,0,0,0.05);border-radius:5px;padding:0.22rem 0.75rem;font-size:0.65rem;color:#ccc;margin:0 0.75rem}
+    .wb-body{padding:1rem;display:flex;flex-direction:column;gap:0.625rem;flex:1;overflow:hidden}
+    /* Build-up elements */
+    .wb-nav{height:28px;background:#f8f7ff;border-radius:8px;display:flex;align-items:center;gap:0.6rem;padding:0 0.75rem;opacity:0;animation:wbE1 10s ease-in-out infinite;flex-shrink:0}
+    .wb-hero-block{background:linear-gradient(135deg,#EDE8F8,#C8B8E0);border-radius:10px;flex:0 0 38%;display:flex;flex-direction:column;justify-content:center;padding:1rem 1.25rem;opacity:0;animation:wbE2 10s ease-in-out infinite}
+    .wb-row{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;flex:0 0 22%;opacity:0;animation:wbE3 10s ease-in-out infinite}
+    .wb-cardrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.625rem;flex:1;min-height:0;opacity:0;animation:wbE4 10s ease-in-out infinite}
+    @keyframes wbE1{0%,2%{opacity:0;transform:translateY(6px)}10%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
+    @keyframes wbE2{0%,12%{opacity:0;transform:translateY(6px)}22%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
+    @keyframes wbE3{0%,24%{opacity:0;transform:translateY(6px)}34%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
+    @keyframes wbE4{0%,36%{opacity:0;transform:translateY(6px)}46%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
+    /* Static stats bar — all 4 stats side by side */
+    .wb-stats-bar{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.07);display:grid;grid-template-columns:repeat(4,1fr)}
+    .wb-stat-item{padding:1.25rem 2rem;border-right:1px solid rgba(0,0,0,0.06)}
+    .wb-stat-item:last-child{border-right:none}
+    .wb-stat-lbl{font-size:0.67rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#999;margin-bottom:0.35rem}
+    .wb-stat-val{font-size:1.6rem;font-weight:700;letter-spacing:-0.03em;color:#1c1c1e;line-height:1}
+    .wb-stat-val span{font-size:0.9rem;font-weight:400;color:#bbb}
+    @media(max-width:768px){.hero-visual{display:none}}
+  </style>
+</head>
+<body>
+
+<!-- ── SCROLL PROGRESS ────────────────────────────── -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ── PAGE SIDEBAR ──────────────────────────────── -->
+<nav class="page-sidebar" id="pageSidebar">
+  <a class="sidebar-link active" href="#hero">Home</a>
+  <a class="sidebar-link" href="#features">Features</a>
+  <a class="sidebar-link" href="#process">How It Works</a>
+  <a class="sidebar-link" href="#testimonials">Reviews</a>
+</nav>
+
+<!-- ── NAV ────────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="WebCraftLogo.svg" alt="" style="height:34px;width:auto;display:block">
+        WebCraftMT
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="nav-right">
+        <a href="contact.html" class="btn btn-primary">Get a Free Audit →</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="active">Home</a>
+  <a href="services.html">Services</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="btn btn-primary">Get a Free Audit →</a>
+</div>
+
+<!-- ── HERO ────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="orb orb-purple" style="top:-5%;left:-10%" id="orb1"></div>
+  <div class="orb orb-pink"   style="top:15%;right:0"   id="orb2"></div>
+  <div class="orb orb-blue"   style="bottom:-5%;left:35%" id="orb3"></div>
+
+  <div class="wrap"><div class="hero-inner">
+    <div class="hero-content">
+
+      <div class="hero-eyebrow anim-blur" style="--d:0">
+        <span class="tag"><span class="tag-dot"></span>California-Based Web Studio</span>
+      </div>
+
+      <div class="hero-business-name anim-blur" style="--d:80">WebCraftMT</div>
+
+      <h1 class="hero-tagline anim-blur" style="--d:220">
+        Your website should work as hard as <em>you&nbsp;do.</em>
+      </h1>
+
+      <p class="hero-sub anim-blur" style="--d:360">
+        We turn outdated, forgettable websites into clean, fast, conversion-ready experiences — and keep them that way, month after month.
+      </p>
+
+      <div class="hero-ctas anim-blur" style="--d:480">
+        <a href="contact.html" class="btn btn-primary btn-lg">Get a Free Website Audit →</a>
+        <a href="services.html" class="btn btn-ghost btn-lg">See Pricing</a>
+      </div>
+
+      <div class="hero-social-proof anim-blur" style="--d:600">
+        <div class="proof-avatars">
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#6644B0,#4A2D8A)">JM</div>
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#B84878,#8C2E58)">SR</div>
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#7C5CBF,#5B3D9A)">AL</div>
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#5068BC,#364EA0)">KP</div>
+        </div>
+        <p class="proof-text"><strong>Small businesses across California</strong> trust us with their online presence</p>
+      </div>
+
+    </div><!-- /hero-content -->
+
+    <!-- ── WEBSITE BUILDER VISUAL ────────────────────── -->
+    <div class="hero-visual">
+
+      <!-- Animated mock browser — website being built section by section -->
+      <div class="wb-browser">
+        <div class="wb-topbar">
+          <div class="wb-dot" style="background:#ff6057"></div>
+          <div class="wb-dot" style="background:#febc2e"></div>
+          <div class="wb-dot" style="background:#28c840"></div>
+          <div class="wb-url">yourbusiness.com</div>
+        </div>
+        <div class="wb-body">
+          <!-- 1. Nav bar fades in first -->
+          <div class="wb-nav">
+            <div style="width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#C4A0D8,#8B68C4);flex-shrink:0"></div>
+            <div style="display:flex;gap:0.4rem;flex:1">
+              <div style="height:5px;width:30px;background:#e4e0f0;border-radius:3px"></div>
+              <div style="height:5px;width:22px;background:#e4e0f0;border-radius:3px"></div>
+              <div style="height:5px;width:28px;background:#e4e0f0;border-radius:3px"></div>
+            </div>
+            <div style="height:16px;width:48px;background:linear-gradient(135deg,#3a3a3a,#1a1a1a);border-radius:4px;flex-shrink:0"></div>
+          </div>
+          <!-- 2. Hero section materializes -->
+          <div class="wb-hero-block">
+            <div style="height:7px;width:42%;background:rgba(255,255,255,0.65);border-radius:3px;margin-bottom:7px"></div>
+            <div style="height:11px;width:68%;background:rgba(255,255,255,0.9);border-radius:5px;margin-bottom:9px"></div>
+            <div style="height:5px;width:52%;background:rgba(255,255,255,0.45);border-radius:3px"></div>
+          </div>
+          <!-- 3. Two-column feature row appears -->
+          <div class="wb-row">
+            <div style="background:#f4f2f9;border-radius:6px;padding:0.5rem 0.6rem">
+              <div style="height:5px;width:72%;background:#ddd8f0;border-radius:3px;margin-bottom:5px"></div>
+              <div style="height:5px;width:48%;background:#e8e4f4;border-radius:3px"></div>
+            </div>
+            <div style="background:linear-gradient(135deg,#ede8f8,#e0d8f0);border-radius:6px"></div>
+          </div>
+          <!-- 4. Card grid builds last -->
+          <div class="wb-cardrow">
+            <div style="background:#fff;border:1px solid #ede8f8;border-radius:7px;overflow:hidden">
+              <div style="height:13px;background:linear-gradient(90deg,#D8CEEE,#C8B8E0)"></div>
+            </div>
+            <div style="background:#fff;border:1px solid #ede8f8;border-radius:7px;overflow:hidden">
+              <div style="height:13px;background:linear-gradient(90deg,#EDE8F8,#D8CEEE)"></div>
+            </div>
+            <div style="background:#fff;border:1px solid #ede8f8;border-radius:7px;overflow:hidden">
+              <div style="height:13px;background:linear-gradient(90deg,#F0E8FC,#EDE8F8)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Static stats bar -->
+      <div class="wb-stats-bar">
+        <div class="wb-stat-item">
+          <div class="wb-stat-lbl">⚡ Page Speed</div>
+          <div class="wb-stat-val">98 <span>/ 100</span></div>
+        </div>
+        <div class="wb-stat-item">
+          <div class="wb-stat-lbl">🚀 Delivery Time</div>
+          <div class="wb-stat-val">3 <span>days or less</span></div>
+        </div>
+        <div class="wb-stat-item">
+          <div class="wb-stat-lbl">📈 Traffic Growth</div>
+          <div class="wb-stat-val">+287 <span>% avg</span></div>
+        </div>
+        <div class="wb-stat-item">
+          <div class="wb-stat-lbl">📱 Mobile Optimized</div>
+          <div class="wb-stat-val">100 <span>%</span></div>
+        </div>
+      </div>
+
+    </div><!-- /hero-visual -->
+
+  </div></div><!-- /hero-inner /wrap -->
+</section>
+
+<!-- ── MARQUEE ─────────────────────────────────────── -->
+<div class="marquee-outer">
+  <div class="marquee-track">
+    <!-- duplicated for seamless loop -->
+    <span class="marquee-item"><span class="marquee-dot"></span>Website Revamps</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Monthly Care Plans</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Mobile-First Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SEO Optimization</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Fast Delivery</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>California-Based</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>USA Swimming Websites</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Small Business Specialists</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Website Revamps</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Monthly Care Plans</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Mobile-First Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SEO Optimization</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Fast Delivery</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>California-Based</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>USA Swimming Websites</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Small Business Specialists</span>
+  </div>
+</div>
+
+<!-- ── STATS ───────────────────────────────────────── -->
+<section class="stats-band">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="glass stat-card anim-scale" style="--d:0">
+        <span class="stat-value grad-text">
+          <span class="stat-num" data-target="3" data-suffix=" days">0 days</span>
+        </span>
+        <span class="stat-label">Max delivery time</span>
+      </div>
+      <div class="glass stat-card anim-scale" style="--d:100">
+        <span class="stat-value grad-text">
+          <span class="stat-num" data-target="100" data-suffix="%">0%</span>
+        </span>
+        <span class="stat-label">Mobile-responsive sites</span>
+      </div>
+      <div class="glass stat-card anim-scale" style="--d:200">
+        <span class="stat-value grad-text">
+          <span class="stat-num" data-target="3" data-suffix="x">0x</span>
+        </span>
+        <span class="stat-label">Average traffic increase</span>
+      </div>
+      <div class="glass stat-card anim-scale" style="--d:300">
+        <span class="stat-value grad-text">
+          <span class="stat-num" data-target="30" data-suffix="+">0+</span>
+        </span>
+        <span class="stat-label">California businesses served</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES (Apple-style alternating) ─────────── -->
+<section class="section" id="features">
+  <div class="wrap">
+
+    <!-- Row 1 -->
+    <div class="feature-row">
+      <div class="feature-text">
+        <span class="tag anim-blur" style="--d:0"><span class="tag-dot"></span>Before & After</span>
+        <h2 class="word-split anim-blur" style="--d:80">From embarrassing to <em>unforgettable.</em></h2>
+        <p class="anim-blur" style="--d:180">Most small business websites were built once and never touched again. They're slow, they look dated on phones, and they're losing you customers every single day. We fix all of that — fast.</p>
+        <div class="anim-blur" style="--d:260">
+          <a href="contact.html" class="btn btn-primary">See What's Possible →</a>
+        </div>
+      </div>
+      <div class="feature-visual anim-scale" style="--d:100;background:linear-gradient(135deg,#ececf0,#e4e4e8)">
+        <div class="feature-visual-inner">
+          <div class="mock-browser">
+            <div class="mock-bar">
+              <div class="mock-dot" style="background:#ff6057"></div>
+              <div class="mock-dot" style="background:#febc2e"></div>
+              <div class="mock-dot" style="background:#28c840"></div>
+              <div class="mock-url">yourbusiness.com</div>
+            </div>
+            <div class="mock-body">
+              <div class="mock-hero-block">
+                <div style="display:flex;flex-direction:column;gap:5px;width:100%">
+                  <div class="mock-line" style="width:60%;background:rgba(0,0,0,0.12)"></div>
+                  <div class="mock-line short" style="background:rgba(0,0,0,0.07)"></div>
+                </div>
+              </div>
+              <div class="mock-line med"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-cards">
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <span class="tag anim-blur" style="--d:0"><span class="tag-dot"></span>Monthly Care</span>
+        <h2 class="word-split anim-blur" style="--d:80">Set it, <em>and forget it.</em></h2>
+        <p class="anim-blur" style="--d:180">Our care plans mean your website is never broken, never out of date, and never embarrassing. We handle every update, every security patch, every content change — so you can focus on running your business.</p>
+        <div class="anim-blur" style="--d:260">
+          <a href="services.html#maintenance" class="btn btn-primary">View Care Plans →</a>
+        </div>
+      </div>
+      <div class="feature-visual anim-scale" style="--d:100;background:linear-gradient(135deg,#f0eeee,#e8e8e8)">
+        <div class="feature-visual-inner" style="flex-direction:column;gap:0.75rem;padding:2rem">
+          <!-- checklist visual -->
+          <div style="width:85%">
+            <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
+              <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
+              <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Security updates applied</span>
+              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">Today</span>
+            </div>
+            <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
+              <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
+              <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Site speed optimized</span>
+              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">2 days ago</span>
+            </div>
+            <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
+              <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
+              <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Content edits applied</span>
+              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">3 days ago</span>
+            </div>
+            <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem">
+              <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
+              <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Monthly report sent</span>
+              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">1 week ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="feature-row">
+      <div class="feature-text">
+        <span class="tag anim-blur" style="--d:0"><span class="tag-dot"></span>Built With AI</span>
+        <h2 class="word-split anim-blur" style="--d:80">Faster builds. <em>Better results.</em></h2>
+        <p class="anim-blur" style="--d:180">We use cutting-edge AI tools to write your copy, generate your layout, and speed up every part of the build — which means you get a better website in a fraction of the time (and cost) of a traditional agency.</p>
+        <div class="anim-blur" style="--d:260">
+          <a href="contact.html" class="btn btn-primary">Start Your Project →</a>
+        </div>
+      </div>
+      <div class="feature-visual anim-scale" style="--d:100;background:linear-gradient(135deg,#ececf0,#e6e6eb)">
+        <div class="feature-visual-inner" style="flex-direction:column;gap:0;padding:2rem">
+          <div style="width:85%;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,0.08);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+            <div style="background:rgba(0,0,0,0.03);padding:0.75rem 1rem;border-bottom:1px solid rgba(0,0,0,0.07);font-size:0.7rem;color:var(--text-3);font-weight:600;letter-spacing:0.08em">AI COPY GENERATION</div>
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:0.5rem">
+              <div style="background:rgba(0,0,0,0.04);border-radius:8px;padding:0.6rem 0.875rem;font-size:0.75rem;color:var(--text-2)">Writing hero headline...</div>
+              <div style="background:rgba(0,0,0,0.04);border-radius:8px;padding:0.6rem 0.875rem;font-size:0.75rem;color:var(--text-2)">Generating service descriptions...</div>
+              <div style="background:rgba(0,0,0,0.07);border-radius:8px;padding:0.6rem 0.875rem;font-size:0.75rem;color:#111;font-weight:500">✦ Website copy complete — 5 pages</div>
+              <div style="background:rgba(0,0,0,0.04);border-radius:8px;padding:0.6rem 0.875rem;font-size:0.75rem;color:var(--text-3)">Total time: 4 minutes 12 seconds</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PROCESS ─────────────────────────────────────── -->
+<section class="section process" id="process">
+  <div class="wrap" style="position:relative;z-index:1">
+    <div style="max-width:560px">
+      <span class="tag anim-blur" style="--d:0"><span class="tag-dot"></span>How It Works</span>
+      <h2 class="word-split anim-blur" style="--d:80">From first conversation to live website — <em>fast.</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="glass step anim-blur hover-lift" style="--d:0">
+        <div class="step-num">1</div>
+        <h4>Free Audit Call</h4>
+        <p>We review your current site together and identify exactly what's holding it back.</p>
+      </div>
+      <div class="glass step anim-blur hover-lift" style="--d:100">
+        <div class="step-num">2</div>
+        <h4>Proposal & Quote</h4>
+        <p>A clear scope, timeline, and fixed price. No surprises, no hourly billing.</p>
+      </div>
+      <div class="glass step anim-blur hover-lift" style="--d:200">
+        <div class="step-num">3</div>
+        <h4>We Build It</h4>
+        <p>We handle everything — copy, design, development — and keep you updated throughout.</p>
+      </div>
+      <div class="glass step anim-blur hover-lift" style="--d:300">
+        <div class="step-num">4</div>
+        <h4>Launch & Beyond</h4>
+        <p>Your new site goes live. Enroll in a care plan and we'll keep it growing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ────────────────────────────────── -->
+<section class="section testimonial-section" id="testimonials">
+  <div class="wrap" style="position:relative;z-index:1">
+    <div style="text-align:center;max-width:540px;margin:0 auto">
+      <span class="tag anim-blur" style="--d:0"><span class="tag-dot"></span>Client Stories</span>
+      <h2 class="word-split anim-blur" style="--d:80">Results that actually matter to <em>small businesses.</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="glass t-card anim-blur hover-lift" style="--d:0">
+        <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="t-quote">"Our old website was embarrassing. Within a week of the new one going live, we had three new clients reach out through the contact form. It basically paid for itself."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#6644B0,#4A2D8A)">JM</div>
+          <div><div class="t-name">[Client Name]</div><div class="t-role">[Business], [City] CA</div></div>
+        </div>
+      </div>
+      <div class="glass t-card anim-blur hover-lift" style="--d:120">
+        <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="t-quote">"I was nervous about the process but they made it completely painless. They handled everything and just needed me for one 30-minute call. Incredible result."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#B84878,#8C2E58)">SR</div>
+          <div><div class="t-name">[Client Name]</div><div class="t-role">[Business], [City] CA</div></div>
+        </div>
+      </div>
+      <div class="glass t-card anim-blur hover-lift" style="--d:240">
+        <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="t-quote">"The monthly plan is worth every penny. My site is always up to date and I never have to think about it. That alone saves me hours every month."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#7C5CBF,#5B3D9A)">AL</div>
+          <div><div class="t-name">[Client Name]</div><div class="t-role">[Business], [City] CA</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BAND ────────────────────────────────────── -->
+<section class="cta-band">
+  <div class="orb orb-purple" style="top:-30%;left:30%;opacity:0.6"></div>
+  <div class="orb orb-pink"   style="bottom:-20%;right:20%;opacity:0.5"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <span class="tag anim-blur" style="--d:0;margin-bottom:1.5rem"><span class="tag-dot"></span>No commitment required</span>
+    <h2 class="word-split anim-blur" style="--d:80">Start with a free <em>website audit.</em></h2>
+    <p class="anim-blur" style="--d:200;max-width:480px;margin:0 auto 2.5rem">We'll look at your current site, find what's hurting you, and tell you exactly how we'd fix it — before you spend a single dollar.</p>
+    <div class="btn-group anim-blur" style="--d:320">
+      <a href="contact.html" class="btn btn-primary btn-lg">Get My Free Audit →</a>
+      <a href="services.html" class="btn btn-ghost btn-lg">View Pricing</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><img src="WebCraftLogo.svg" alt="" style="height:34px;width:auto;display:block">WebCraftMT</a>
+        <p>Beautiful, fast websites for small businesses in California. Built with care, maintained with consistency.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Pages</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services & Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html">Free Audit</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:aiden.jun.taylor@gmail.com">aiden.jun.taylor@gmail.com</a></li>
+          <li><a href="tel:9496868332">(949) 686-8332</a></li>
+          <li><a href="#">Yorba Linda, California</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 WebCraftMT. All rights reserved.</p>
+      <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════
+     ANIMATION ENGINE
+══════════════════════════════════════════════════ -->
+<script>
+(function() {
+
+  /* ── 1. Nav scroll + progress bar ── */
+  const nav = document.getElementById('nav');
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const y = scrollY;
+    nav.classList.toggle('scrolled', y > 50);
+    const pct = (y / (document.body.scrollHeight - innerHeight)) * 100;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  /* ── 2. Mobile menu ── */
+  document.getElementById('hamburger').addEventListener('click', () =>
+    document.getElementById('mobileNav').classList.toggle('open'));
+
+  /* ── 3. Word-by-word split ──
+     Wraps each word in a <span class="word" style="--i:N">
+     Applied to .word-split elements before observer fires  */
+  function splitWords(el) {
+    const html = el.innerHTML;
+    // preserve <em> tags by splitting on spaces outside tags
+    const nodes = [];
+    let buf = '', inTag = false, wordIdx = 0;
+    for (let i = 0; i < html.length; i++) {
+      const ch = html[i];
+      if (ch === '<') { inTag = true; buf += ch; }
+      else if (ch === '>') { inTag = false; buf += ch; }
+      else if (!inTag && ch === ' ') {
+        if (buf.trim()) {
+          nodes.push(`<span class="word" style="--i:${wordIdx++}">${buf}</span>`);
+          wordIdx;
+        }
+        nodes.push(' ');
+        buf = '';
+      } else {
+        buf += ch;
+      }
+    }
+    if (buf.trim()) nodes.push(`<span class="word" style="--i:${wordIdx}">${buf}</span>`);
+    el.innerHTML = nodes.join('');
+  }
+
+  document.querySelectorAll('.word-split').forEach(el => splitWords(el));
+
+  /* ── 4. IntersectionObserver for all animated elements ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target); // fire once
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  // Observe all animation classes + hero elements
+  document.querySelectorAll('.anim-blur, .anim-scale, .anim-line, .word-split, .fade-up')
+    .forEach(el => io.observe(el));
+
+  // Hero fires immediately on load
+  setTimeout(() => {
+    document.querySelectorAll('#hero .anim-blur, #hero .word-split').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 120);
+
+  /* ── 5. Counter animation ── */
+  function animateCounter(el) {
+    const raw    = el.dataset.target;
+    const target = parseFloat(raw);
+    const suffix = el.dataset.suffix || '';
+    const dur    = 1800;
+    const start  = performance.now();
+    const isInt  = Number.isInteger(target);
+
+    const tick = (now) => {
+      const t = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - t, 4); // easeOutQuart
+      const val = eased * target;
+      el.textContent = (isInt ? Math.floor(val) : val.toFixed(1)) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  const counterIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.stat-num[data-target]').forEach(animateCounter);
+        counterIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.stats-grid').forEach(el => counterIO.observe(el));
+
+  /* ── 6. Parallax orbs on scroll ── */
+  const orbs = document.querySelectorAll('.orb');
+  window.addEventListener('scroll', () => {
+    const y = scrollY;
+    orbs.forEach((orb, i) => {
+      const speed = 0.06 + i * 0.04;
+      orb.style.transform = `translateY(${y * speed}px)`;
+    });
+  }, { passive: true });
+
+  /* ── 7. Mouse-track parallax on hero orbs ── */
+  const heroOrbs = [
+    document.getElementById('orb1'),
+    document.getElementById('orb2'),
+    document.getElementById('orb3'),
+  ].filter(Boolean);
+
+  document.addEventListener('mousemove', (e) => {
+    const cx = e.clientX / innerWidth  - 0.5; // -0.5 to 0.5
+    const cy = e.clientY / innerHeight - 0.5;
+    heroOrbs.forEach((orb, i) => {
+      const mag = 22 + i * 14;
+      orb.style.transform = `translate(${cx * mag}px, ${cy * mag}px)`;
+    });
+  });
+
+  /* ── 8. Smooth scroll for anchor links ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  /* ── 9. Stats cycling ── */
+  const wbStats = document.querySelectorAll('.wb-stat');
+  const wbDots  = document.querySelectorAll('.wb-stat-dot');
+  if (wbStats.length) {
+    let wbCur = 0;
+    wbStats[0].classList.add('active');
+    if (wbDots[0]) wbDots[0].classList.add('active');
+    setInterval(() => {
+      const prev = wbCur;
+      wbStats[prev].classList.add('exiting');
+      wbStats[prev].classList.remove('active');
+      setTimeout(() => wbStats[prev].classList.remove('exiting'), 450);
+      if (wbDots[prev]) wbDots[prev].classList.remove('active');
+      wbCur = (wbCur + 1) % wbStats.length;
+      wbStats[wbCur].classList.add('active');
+      if (wbDots[wbCur]) wbDots[wbCur].classList.add('active');
+    }, 3000);
+  }
+
+  /* ── 10. Sidebar scroll-spy ── */
+  const sectionIds = ['hero', 'features', 'process', 'testimonials'];
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+  const spyIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const idx = sectionIds.indexOf(entry.target.id);
+      if (idx === -1) return;
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      if (sidebarLinks[idx]) sidebarLinks[idx].classList.add('active');
+    });
+  }, { threshold: 0.35 });
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) spyIO.observe(el);
+  });
+
+})();
+</script>
+</body>
+</html>
