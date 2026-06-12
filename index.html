@@ -59,8 +59,10 @@
     }
 
     /* ── Hero visual (website builder) ── */
-    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:3rem}
-    .hero-inner .hero-content{text-align:center;max-width:740px;width:100%}
+    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:0}
+    .hero-inner>.hero-eyebrow{margin-bottom:0.75rem}
+    .hero-inner>.hero-business-name{width:100%;text-align:center;margin-bottom:1.5rem}
+    .hero-inner>.hero-content{text-align:center;max-width:740px;width:100%;margin-bottom:3rem}
     .hero-inner .hero-ctas{justify-content:center}
     .hero-inner .hero-social-proof{justify-content:center}
     .hero-inner .hero-tagline{margin:0 auto}
@@ -146,13 +148,13 @@
   <div class="orb orb-blue"   style="bottom:-5%;left:35%" id="orb3"></div>
 
   <div class="wrap"><div class="hero-inner">
+    <div class="hero-eyebrow anim-blur" style="--d:0">
+      <span class="tag"><span class="tag-dot"></span>California-Based Web Studio</span>
+    </div>
+
+    <div class="hero-business-name anim-blur" style="--d:80">WebCraftMT</div>
+
     <div class="hero-content">
-
-      <div class="hero-eyebrow anim-blur" style="--d:0">
-        <span class="tag"><span class="tag-dot"></span>California-Based Web Studio</span>
-      </div>
-
-      <div class="hero-business-name anim-blur" style="--d:80">WebCraftMT</div>
 
       <h1 class="hero-tagline anim-blur" style="--d:220">
         Your website should work as hard as <em>you&nbsp;do.</em>

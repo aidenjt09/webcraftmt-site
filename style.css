@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&display=swap');
 
 /* ── TOKENS ─────────────────────────────────────────── */
 :root {
@@ -127,14 +127,13 @@ h1 em,h2 em,h3 em{
 .hero-content{position:relative;z-index:2;max-width:780px}
 .hero-eyebrow{margin-bottom:1.5rem}
 .hero-business-name{
-  font-family:'Plus Jakarta Sans',-apple-system,'SF Pro Display',sans-serif;
-  font-weight:800;
+  font-family:'Instrument Serif','DM Serif Display',serif;
+  font-style:italic;
+  font-weight:400;
   font-size:clamp(4rem,12vw,9rem);
-  letter-spacing:-0.03em;
+  letter-spacing:-0.02em;
   line-height:0.9;
   color:#1c1c1e;
-  margin-bottom:1.75rem;
-  text-align:center;
 }
 .hero-tagline{
   font-size:clamp(1.1rem,2vw,1.45rem);
@@ -150,7 +149,7 @@ h1 em,h2 em,h3 em{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   padding-right:0.15em;
 }
-.hero-sub{font-size:1rem;max-width:500px;margin-bottom:2rem;line-height:1.75;color:var(--text-3)}
+.hero-sub{font-size:1rem;max-width:500px;margin-bottom:3rem;line-height:1.75;color:var(--text-3)}
 .hero-ctas{display:flex;gap:0.875rem;flex-wrap:wrap;margin-bottom:2rem}
 .hero-social-proof{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
 .proof-avatars{display:flex}
