@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Cormorant+Display:wght@600;700&display=swap');
 
 /* ── TOKENS ─────────────────────────────────────────── */
 :root {
@@ -127,11 +127,11 @@ h1 em,h2 em,h3 em{
 .hero-content{position:relative;z-index:2;max-width:780px}
 .hero-eyebrow{margin-bottom:1.5rem}
 .hero-business-name{
-  font-family:'Instrument Serif','DM Serif Display',serif;
-  font-style:italic;
-  font-weight:400;
+  font-family:'Cormorant Display','DM Serif Display',serif;
+  font-style:normal;
+  font-weight:700;
   font-size:clamp(4rem,12vw,9rem);
-  letter-spacing:-0.02em;
+  letter-spacing:-0.01em;
   line-height:0.9;
   color:#1c1c1e;
 }
