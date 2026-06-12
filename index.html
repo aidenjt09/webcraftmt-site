@@ -59,7 +59,7 @@
     }
 
     /* ── Hero visual (website builder) ── */
-    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:3rem}
+    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:4.5rem}
     .hero-inner .hero-content{text-align:center;max-width:740px;width:100%}
     .hero-inner .hero-ctas{justify-content:center}
     .hero-inner .hero-social-proof{justify-content:center}
@@ -73,18 +73,22 @@
     .wb-url{flex:1;background:rgba(0,0,0,0.05);border-radius:5px;padding:0.22rem 0.75rem;font-size:0.65rem;color:#ccc;margin:0 0.75rem}
     .wb-body{padding:1rem;display:flex;flex-direction:column;gap:0.625rem;flex:1;overflow:hidden}
     /* Build-up elements */
-    .wb-nav{height:28px;background:#f8f7ff;border-radius:8px;display:flex;align-items:center;gap:0.6rem;padding:0 0.75rem;opacity:0;animation:wbE1 10s ease-in-out infinite;flex-shrink:0}
-    .wb-hero-block{background:linear-gradient(135deg,#EDE8F8,#C8B8E0);border-radius:10px;flex:0 0 38%;display:flex;flex-direction:column;justify-content:center;padding:1rem 1.25rem;opacity:0;animation:wbE2 10s ease-in-out infinite}
-    .wb-row{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;flex:0 0 22%;opacity:0;animation:wbE3 10s ease-in-out infinite}
-    .wb-cardrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.625rem;flex:1;min-height:0;opacity:0;animation:wbE4 10s ease-in-out infinite}
+    .wb-nav{height:28px;background:#f8f7ff;border-radius:8px;display:flex;align-items:center;gap:0.6rem;padding:0 0.75rem;opacity:0;animation:wbE1 6s ease-in-out infinite;flex-shrink:0}
+    .wb-hero-block{background:linear-gradient(135deg,#EDE8F8,#C8B8E0);border-radius:10px;flex:0 0 38%;display:flex;flex-direction:column;justify-content:center;padding:1rem 1.25rem;opacity:0;animation:wbE2 6s ease-in-out infinite}
+    .wb-row{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;flex:0 0 22%;opacity:0;animation:wbE3 6s ease-in-out infinite}
+    .wb-cardrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.625rem;flex:1;min-height:0;opacity:0;animation:wbE4 6s ease-in-out infinite}
     @keyframes wbE1{0%,2%{opacity:0;transform:translateY(6px)}10%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     @keyframes wbE2{0%,12%{opacity:0;transform:translateY(6px)}22%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     @keyframes wbE3{0%,24%{opacity:0;transform:translateY(6px)}34%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     @keyframes wbE4{0%,36%{opacity:0;transform:translateY(6px)}46%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     /* Static stats bar — all 4 stats side by side */
     .wb-stats-bar{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.07);display:grid;grid-template-columns:repeat(4,1fr)}
-    .wb-stat-item{padding:1.25rem 2rem;border-right:1px solid rgba(0,0,0,0.06)}
+    .wb-stat-item{padding:1.25rem 2rem;border-right:1px solid rgba(0,0,0,0.06);opacity:0;transform:translateY(10px);transition:opacity 0.5s cubic-bezier(0.16,1,0.3,1),transform 0.5s cubic-bezier(0.16,1,0.3,1)}
     .wb-stat-item:last-child{border-right:none}
+    .wb-stat-item.wb-stat-visible{opacity:1;transform:translateY(0)}
+    .wb-stat-item:nth-child(2).wb-stat-visible{transition-delay:0.1s}
+    .wb-stat-item:nth-child(3).wb-stat-visible{transition-delay:0.2s}
+    .wb-stat-item:nth-child(4).wb-stat-visible{transition-delay:0.3s}
     .wb-stat-lbl{font-size:0.67rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#999;margin-bottom:0.35rem}
     .wb-stat-val{font-size:1.6rem;font-weight:700;letter-spacing:-0.03em;color:#1c1c1e;line-height:1}
     .wb-stat-val span{font-size:0.9rem;font-weight:400;color:#bbb}
@@ -224,23 +228,23 @@
         </div>
       </div>
 
-      <!-- Static stats bar -->
-      <div class="wb-stats-bar">
+      <!-- Animated stats bar -->
+      <div class="wb-stats-bar" id="wbStatsBar">
         <div class="wb-stat-item">
           <div class="wb-stat-lbl">⚡ Page Speed</div>
-          <div class="wb-stat-val">98 <span>/ 100</span></div>
+          <div class="wb-stat-val"><span class="wb-count" data-target="98">0</span> <span>/ 100</span></div>
         </div>
         <div class="wb-stat-item">
           <div class="wb-stat-lbl">🚀 Delivery Time</div>
-          <div class="wb-stat-val">3 <span>days or less</span></div>
+          <div class="wb-stat-val"><span class="wb-count" data-target="3">0</span> <span>days or less</span></div>
         </div>
         <div class="wb-stat-item">
           <div class="wb-stat-lbl">📈 Traffic Growth</div>
-          <div class="wb-stat-val">+287 <span>% avg</span></div>
+          <div class="wb-stat-val"><span class="wb-count" data-target="287" data-prefix="+">+0</span> <span>% avg</span></div>
         </div>
         <div class="wb-stat-item">
           <div class="wb-stat-lbl">📱 Mobile Optimized</div>
-          <div class="wb-stat-val">100 <span>%</span></div>
+          <div class="wb-stat-val"><span class="wb-count" data-target="100">0</span> <span>%</span></div>
         </div>
       </div>
 
@@ -664,7 +668,40 @@
     });
   });
 
-  /* ── 9. Stats cycling ── */
+  /* ── 9. Stats bar animation + count-up ── */
+  const wbBar = document.getElementById('wbStatsBar');
+  if (wbBar) {
+    const wbItems = wbBar.querySelectorAll('.wb-stat-item');
+    const wbCounts = wbBar.querySelectorAll('.wb-count[data-target]');
+
+    function runWbStats() {
+      wbItems.forEach((item, i) => {
+        setTimeout(() => item.classList.add('wb-stat-visible'), i * 120);
+      });
+      wbCounts.forEach((el, i) => {
+        const target = parseInt(el.dataset.target);
+        const prefix = el.dataset.prefix || '';
+        setTimeout(() => {
+          const dur = 1000;
+          const start = performance.now();
+          const tick = (now) => {
+            const t = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = prefix + Math.floor(eased * target);
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }, i * 120);
+      });
+    }
+
+    const wbBarIO = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { runWbStats(); wbBarIO.disconnect(); }
+    }, { threshold: 0.3 });
+    wbBarIO.observe(wbBar);
+  }
+
+  /* ── (old) Stats cycling ── */
   const wbStats = document.querySelectorAll('.wb-stat');
   const wbDots  = document.querySelectorAll('.wb-stat-dot');
   if (wbStats.length) {
