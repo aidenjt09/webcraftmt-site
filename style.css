@@ -130,7 +130,7 @@ h1 em,h2 em,h3 em{
   font-family:'Cormorant Display','DM Serif Display',serif;
   font-style:normal;
   font-weight:700;
-  font-size:clamp(4rem,12vw,9rem);
+  font-size:clamp(2.5rem,12vw,9rem);
   letter-spacing:-0.01em;
   line-height:0.9;
   color:#1c1c1e;
@@ -328,8 +328,35 @@ h1 em,h2 em,h3 em{
   .form-row{grid-template-columns:1fr}
   .hero-ctas{flex-direction:column;width:100%}
   .hero-ctas .btn{width:100%;justify-content:center}
+  /* Mobile section spacing */
+  .hero{padding:7rem 0 4rem}
+  .section{padding:5rem 0}
+  .cta-band{padding:4.5rem 0}
+  .page-hero{padding:7.5rem 0 3.5rem}
+  /* Social proof stacks cleanly */
+  .hero-social-proof{flex-direction:column;align-items:center;text-align:center;gap:0.75rem}
+  .proof-text{text-align:center}
 }
 @media(max-width:480px){
-  .section{padding:4.5rem 0}
+  .section{padding:4rem 0}
   .footer-grid{grid-template-columns:1fr}
+  /* Tighter vertical rhythm */
+  .hero{padding:6rem 0 3rem}
+  .stats-band{padding:3rem 0}
+  .cta-band{padding:3.5rem 0}
+  .footer{padding:2.5rem 0 1.5rem}
+  /* Process single column — 2-col at 390px is too cramped */
+  .process-steps{grid-template-columns:1fr;gap:0.875rem;margin-top:2rem}
+  .step{padding:1.5rem 1.25rem}
+  /* Services / contact pages */
+  .page-hero{padding:6.5rem 0 3rem}
+  .pricing-card{padding:2rem 1.25rem}
+  .form-card{padding:1.75rem 1.25rem}
+  /* Reduce section heading size slightly */
+  h2{font-size:clamp(1.5rem,7vw,2.2rem)}
+}
+/* FAQ 2-col → 1-col on mobile */
+@media(max-width:640px){
+  .faq-grid{grid-template-columns:1fr !important;gap:0 !important}
+  .faq-grid>div{padding:1.25rem 0}
 }
