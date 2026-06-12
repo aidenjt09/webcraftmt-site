@@ -59,7 +59,7 @@
     }
 
     /* ── Hero visual (website builder) ── */
-    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:4.5rem}
+    .hero-inner{display:flex;flex-direction:column;align-items:center;gap:3rem}
     .hero-inner .hero-content{text-align:center;max-width:740px;width:100%}
     .hero-inner .hero-ctas{justify-content:center}
     .hero-inner .hero-social-proof{justify-content:center}
@@ -82,13 +82,15 @@
     @keyframes wbE3{0%,24%{opacity:0;transform:translateY(6px)}34%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     @keyframes wbE4{0%,36%{opacity:0;transform:translateY(6px)}46%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-4px)}}
     /* Static stats bar — all 4 stats side by side */
-    .wb-stats-bar{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.07);display:grid;grid-template-columns:repeat(4,1fr)}
-    .wb-stat-item{padding:1.25rem 2rem;border-right:1px solid rgba(0,0,0,0.06);opacity:0;transform:translateY(10px);transition:opacity 0.5s cubic-bezier(0.16,1,0.3,1),transform 0.5s cubic-bezier(0.16,1,0.3,1)}
+    @keyframes wbShimmer{0%{left:-70%}100%{left:120%}}
+    .wb-stats-bar{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.07);display:grid;grid-template-columns:repeat(4,1fr);position:relative;overflow:hidden}
+    .wb-stats-bar::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.75),transparent);animation:wbShimmer 3s ease-in-out infinite;animation-delay:2s;pointer-events:none;z-index:2}
+    .wb-stat-item{padding:1.25rem 2rem;border-right:1px solid rgba(0,0,0,0.06);opacity:0;transform:translateY(12px);transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
     .wb-stat-item:last-child{border-right:none}
     .wb-stat-item.wb-stat-visible{opacity:1;transform:translateY(0)}
-    .wb-stat-item:nth-child(2).wb-stat-visible{transition-delay:0.1s}
-    .wb-stat-item:nth-child(3).wb-stat-visible{transition-delay:0.2s}
-    .wb-stat-item:nth-child(4).wb-stat-visible{transition-delay:0.3s}
+    .wb-stat-item:nth-child(2).wb-stat-visible{transition-delay:0.15s}
+    .wb-stat-item:nth-child(3).wb-stat-visible{transition-delay:0.3s}
+    .wb-stat-item:nth-child(4).wb-stat-visible{transition-delay:0.45s}
     .wb-stat-lbl{font-size:0.67rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#999;margin-bottom:0.35rem}
     .wb-stat-val{font-size:1.6rem;font-weight:700;letter-spacing:-0.03em;color:#1c1c1e;line-height:1}
     .wb-stat-val span{font-size:0.9rem;font-weight:400;color:#bbb}
@@ -676,28 +678,29 @@
 
     function runWbStats() {
       wbItems.forEach((item, i) => {
-        setTimeout(() => item.classList.add('wb-stat-visible'), i * 120);
+        setTimeout(() => item.classList.add('wb-stat-visible'), i * 160);
       });
       wbCounts.forEach((el, i) => {
         const target = parseInt(el.dataset.target);
         const prefix = el.dataset.prefix || '';
+        el.textContent = prefix + '0';
         setTimeout(() => {
-          const dur = 1000;
+          const dur = 2000;
           const start = performance.now();
           const tick = (now) => {
             const t = Math.min((now - start) / dur, 1);
-            const eased = 1 - Math.pow(1 - t, 3);
+            const eased = 1 - Math.pow(1 - t, 4);
             el.textContent = prefix + Math.floor(eased * target);
             if (t < 1) requestAnimationFrame(tick);
           };
           requestAnimationFrame(tick);
-        }, i * 120);
+        }, 300 + i * 160);
       });
     }
 
     const wbBarIO = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) { runWbStats(); wbBarIO.disconnect(); }
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     wbBarIO.observe(wbBar);
   }
 
