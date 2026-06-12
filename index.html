@@ -96,11 +96,23 @@
     .wb-stat-lbl{font-size:0.67rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#999;margin-bottom:0.35rem}
     .wb-stat-val{font-size:1.6rem;font-weight:700;letter-spacing:-0.03em;color:#1c1c1e;line-height:1}
     .wb-stat-val span{font-size:0.9rem;font-weight:400;color:#bbb}
-    @media(max-width:768px){.hero-visual{display:none}}
     @media(max-width:768px){
       .hero-inner>.hero-content{margin-bottom:1.5rem}
       #features{padding:2.5rem 0}
       .stats-band{padding:3.5rem 0}
+      .hero-visual{margin-top:0.5rem}
+    }
+    /* Care plan timestamps — hide on mobile to prevent overflow */
+    .care-time{font-size:0.7rem;color:var(--text-3);margin-left:auto;flex-shrink:0}
+    @media(max-width:768px){.care-time{display:none}}
+    /* Stats bar → 2×2 grid on mobile, browser taller */
+    @media(max-width:600px){
+      .wb-browser{aspect-ratio:4/3}
+      .wb-stats-bar{grid-template-columns:1fr 1fr}
+      .wb-stat-item{padding:0.75rem 0.875rem}
+      .wb-stat-lbl{font-size:0.6rem;letter-spacing:0.06em}
+      .wb-stat-val{font-size:1.15rem}
+      .wb-stat-val span{font-size:0.75rem}
     }
     @media(max-width:480px){
       .hero-inner>.hero-eyebrow{margin-bottom:0.75rem}
@@ -385,22 +397,22 @@
             <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
               <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
               <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Security updates applied</span>
-              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">Today</span>
+              <span class="care-time">Today</span>
             </div>
             <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
               <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
               <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Site speed optimized</span>
-              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">2 days ago</span>
+              <span class="care-time">2 days ago</span>
             </div>
             <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem;margin-bottom:0.6rem">
               <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
               <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Content edits applied</span>
-              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">3 days ago</span>
+              <span class="care-time">3 days ago</span>
             </div>
             <div class="glass" style="padding:1rem 1.25rem;border-radius:12px;display:flex;align-items:center;gap:0.875rem">
               <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem">✓</div>
               <span style="font-size:0.825rem;color:var(--text-2);font-weight:500">Monthly report sent</span>
-              <span style="margin-left:auto;font-size:0.7rem;color:var(--text-3)">1 week ago</span>
+              <span class="care-time">1 week ago</span>
             </div>
           </div>
         </div>
@@ -576,26 +588,46 @@
      Applied to .word-split elements before observer fires  */
   function splitWords(el) {
     const html = el.innerHTML;
-    // preserve <em> tags by splitting on spaces outside tags
-    const nodes = [];
-    let buf = '', inTag = false, wordIdx = 0;
-    for (let i = 0; i < html.length; i++) {
-      const ch = html[i];
-      if (ch === '<') { inTag = true; buf += ch; }
-      else if (ch === '>') { inTag = false; buf += ch; }
-      else if (!inTag && ch === ' ') {
-        if (buf.trim()) {
-          nodes.push(`<span class="word" style="--i:${wordIdx++}">${buf}</span>`);
-          wordIdx;
+    const result = [];
+    let wordIdx = 0;
+    let i = 0;
+
+    function pushWords(text, wrap) {
+      // split on whitespace, preserve runs of whitespace as-is
+      const parts = text.split(/(\s+)/);
+      parts.forEach(part => {
+        if (/^\s+$/.test(part)) { result.push(part); }
+        else if (part) {
+          const inner = wrap ? `<em>${part}</em>` : part;
+          result.push(`<span class="word" style="--i:${wordIdx++}">${inner}</span>`);
         }
-        nodes.push(' ');
-        buf = '';
+      });
+    }
+
+    while (i < html.length) {
+      if (html.startsWith('<em>', i)) {
+        // find closing </em>
+        const end = html.indexOf('</em>', i + 4);
+        if (end !== -1) {
+          pushWords(html.slice(i + 4, end), true);
+          i = end + 5;
+        } else {
+          result.push(html[i++]); // malformed — emit as-is
+        }
+      } else if (html[i] === '<') {
+        // any other tag — emit verbatim
+        const end = html.indexOf('>', i);
+        result.push(html.slice(i, end + 1));
+        i = end + 1;
       } else {
-        buf += ch;
+        // plain text — collect until next tag
+        let j = i;
+        while (j < html.length && html[j] !== '<') j++;
+        pushWords(html.slice(i, j), false);
+        i = j;
       }
     }
-    if (buf.trim()) nodes.push(`<span class="word" style="--i:${wordIdx}">${buf}</span>`);
-    el.innerHTML = nodes.join('');
+    el.innerHTML = result.join('');
   }
 
   document.querySelectorAll('.word-split').forEach(el => splitWords(el));

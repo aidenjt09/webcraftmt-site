@@ -323,11 +323,11 @@ h1 em,h2 em,h3 em{
 }
 @media(max-width:768px){
   .testimonials-grid{grid-template-columns:1fr}
-  .nav-links,.nav-right .btn-ghost{display:none}
+  .nav-links,.nav-right{display:none !important}
   .hamburger{display:flex}
   .form-row{grid-template-columns:1fr}
-  .hero-ctas{flex-direction:column;width:100%}
-  .hero-ctas .btn{width:100%;justify-content:center}
+  .hero-ctas{flex-direction:column;align-items:center;width:100%}
+  .hero-ctas .btn{max-width:280px;width:100%;justify-content:center}
   /* Mobile section spacing */
   .hero{padding:7rem 0 4rem}
   .section{padding:5rem 0}
@@ -336,10 +336,13 @@ h1 em,h2 em,h3 em{
   /* Social proof stacks cleanly */
   .hero-social-proof{flex-direction:column;align-items:center;text-align:center;gap:0.75rem}
   .proof-text{text-align:center}
+  /* Care plans visual — let content dictate height on mobile */
+  .feature-row.reverse .feature-visual{aspect-ratio:unset;height:auto}
 }
 @media(max-width:480px){
   .section{padding:4rem 0}
-  .footer-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:1.5rem 2rem}
+  .footer-brand{grid-column:1/-1}
   /* Tighter vertical rhythm */
   .hero{padding:6rem 0 3rem}
   .stats-band{padding:3rem 0}
